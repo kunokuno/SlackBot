@@ -25,6 +25,7 @@ Botkitの説明は省略しました
 Var 1.0
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //
 //
@@ -79,6 +80,13 @@ var controller = Botkit.slackbot({
 var bot = controller.spawn({
     token: process.env.token
 }).startRTM();
+
+
+//会話モジュールの読み込み
+var tolk_help = require('./talk/help.js');
+tolk_help(controller);
+
+
 
 
 //GoogleAPIを使うための設定
@@ -215,11 +223,10 @@ function listEvents(auth,message) {
 }
 
 
-var year;
 function setGarbageEvents(auth,message){
 
  //年の取得
- year = dt.toFormat("YYYY");
+ var year = dt.toFormat("YYYY");
 
  //イベント内容のJsonは別に描きたい
   var event = {
@@ -438,7 +445,6 @@ controller.hears(['shutdown'], 'direct_message,direct_mention,mention', function
     });
 });
 
-
 controller.hears(['uptime', 'identify yourself', 'who are you', 'what is your name'],
     'direct_message,direct_mention,mention', function(bot, message) {
 
@@ -476,20 +482,7 @@ function formatUptime(uptime) {
 
 //ここから追加した会話
 
-controller.hears(['help'], 'direct_message,direct_mention,mention', function(bot, message) {
-        bot.say({
-            text: '`[list]`:設定した予定を表示します',
-            channel: message.channel
-        });
-        bot.say({
-            text: '`[set (@名前) (日付)]`:調整中',
-            channel: message.channel
-        });
-        bot.say({
-            text: '`[trash (@名前) (日付:例12-01)]`:ゴミ捨ての予定を登録',
-            channel: message.channel
-        });
-});
+
 
 
 //googleカレンダーから予定を持ってくる(現在時刻より先の予定)
