@@ -1,8 +1,0 @@
-# ホワイトリスト記述
-
-*
-*/
-!.gitignore
-!slack_bot.js
-!README.MD
-!/talk/
