@@ -1,0 +1,7 @@
+# ホワイトリスト記述
+
+*
+*/
+!.gitignore
+!slack_bot.js
+!/talk/
