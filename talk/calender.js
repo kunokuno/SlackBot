@@ -42,7 +42,7 @@ controller.hears(['remind'], 'direct_message,direct_mention,mention', function(b
 
 
 //当日のゴミ捨ての予定があればリマインド
-cron.schedule('0 00 08 * * *', () =>  {
+cron.schedule('0 00 08 * * 2,5', () =>  {
     
     bot.say({
             text: '本日の予定をお知らせします.',
@@ -62,7 +62,7 @@ cron.schedule('0 00 08 * * *', () =>  {
 
 
 //翌日のゴミ捨ての予定があればリマインド
-cron.schedule('0 00 18 * * *',() =>  {
+cron.schedule('0 00 18 * * 1,4',() =>  {
 
     bot.say({
             text: '明日の予定をお知らせします.',
