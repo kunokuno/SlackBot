@@ -14,6 +14,12 @@ controller.hears(['list'], 'direct_message,direct_mention,mention', function(bot
 
 });
 
+//googleカレンダーにゴミ捨ての予定を追加(現在時刻より先の予定)
+controller.hears(['trash (.*) (.*)','ゴミ捨て (.*) (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+    api.trash(bot,message);
+
+});
+
 
 
 
@@ -48,7 +54,7 @@ cron.schedule('0 00 08 * * *', () =>  {
             console.log('Error loading client secret file: ' + err);
             return;
         }
-        api.gomi_next(bot,remindId);
+        api.gomi_call(bot,remindId);
         
     });    
 
@@ -68,7 +74,7 @@ cron.schedule('0 00 18 * * *',() =>  {
             console.log('Error loading client secret file: ' + err);
             return;
         }
-        api.gomi_next(bot,remindId);
+        api.gomi_call(bot,remindId);
     });
 
 });

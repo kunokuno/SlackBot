@@ -13,7 +13,7 @@ module.exports = function (controller) {
             channel: message.channel
         });
         bot.say({
-            text: '`[trash (@名前) (日付)]`:ゴミ捨ての予定を登録,例:trash @hoge 12-01)',
+            text: '`[trash/ゴミ捨て (@名前) (日付)]`:ゴミ捨ての予定を登録,`trash @hoge 12-01`)',
             channel: message.channel
         });
 

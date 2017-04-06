@@ -40,12 +40,6 @@ slackbot_workerのretryがtrueになってればいいけど
 //
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-//日付取得　 
-//npm install date-utils から.
-require('date-utils');
-var dt = new Date();
-
-
 //トークンとか読み込み
 var fs = require('fs');
 var token = JSON.parse(fs.readFileSync("id.json", "utf-8"));
