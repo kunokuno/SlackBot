@@ -42,7 +42,8 @@ controller.hears(['remind'], 'direct_message,direct_mention,mention', function(b
 
 
 //当日のゴミ捨ての予定があればリマインド
-cron.schedule('0 00 08 * * 2,5', () =>  {
+//2,5
+var remindTask_1 = cron.schedule('0 00 8 * * *', () =>  {
     
     bot.say({
             text: '本日の予定をお知らせします.',
@@ -60,9 +61,9 @@ cron.schedule('0 00 08 * * 2,5', () =>  {
 
 });
 
-
+//1,4
 //翌日のゴミ捨ての予定があればリマインド
-cron.schedule('0 00 18 * * 1,4',() =>  {
+var remindTask_2 = cron.schedule('0 00 18 * * *',() =>  {
 
     bot.say({
             text: '明日の予定をお知らせします.',
@@ -77,6 +78,16 @@ cron.schedule('0 00 18 * * 1,4',() =>  {
         api.gomi_call(bot,remindId);
     });
 
+});
+
+//taskの開始
+remindTask_1.start();
+remindTask_2.start();
+
+//再起動時にtaskを再登録　
+controller.on('rtm_close', function(bot, err) {
+        remindTask_1.start();
+        remindTask_2.start();
 });
 
 
