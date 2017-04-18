@@ -58,6 +58,7 @@ var os = require('os');
 
 var controller = Botkit.slackbot({
     debug: true,
+    retry: Infinity,
   });
 
 var bot = controller.spawn({
