@@ -16,6 +16,10 @@ module.exports = function (controller) {
             text: '`[trash/ゴミ捨て (@名前) (日付)]`:ゴミ捨ての予定を登録,`trash @hoge 12-01`)',
             channel: message.channel
         });
+        bot.say({
+            text: '`[semi/ゼミ(@名前) (日付)]`:ゼミの一覧を表示',
+            channel: message.channel
+        });
 
 
 

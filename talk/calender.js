@@ -14,6 +14,36 @@ controller.hears(['list'], 'direct_message,direct_mention,mention', function(bot
 
 });
 
+
+
+//googleカレンダーから予定を持ってきたいけど
+//とりあえず
+controller.hears(['semi','ゼミ'], 'direct_message,direct_mention,mention', function(bot, message) {
+    bot.reply(message,'火曜日 14:30～16:30頃\n'+
+                    '5月16日　薄井(1)　久野(1)　長岡(1)\n'+
+                    '5月30日　中山(1)　山岸(1)　遊佐(1)\n'+
+                    '6月13日　薄井(2)　久野(2)　長岡(2)\n'+
+                    '6月27日　中山(2)　山岸(2)　遊佐(2)\n'+
+                    '7月11日　薄井(3)　久野(3)　長岡(3)\n'+
+                    '7月25日　中山(3)　山岸(3)　遊佐(3)\n'+
+                    '金曜日 9:00～10:00頃\n'+
+                    '5月12日　田代(1)\n'+
+                    '5月19日　岡田(1)\n'+
+                    '5月26日　築地(1)\n'+
+                    '6月02日　田代(2)\n'+
+                    '6月09日　岡田(2)\n'+
+                    '6月16日　築地(2)\n'+
+                    '6月23日　田代(3)\n'+
+                    '6月30日　岡田(3)\n'+
+                    '7月07日　築地(3)\n'+
+                    '7月14日　田代(4)\n'+
+                    '7月21日　岡田(4)\n'+
+                    '7月28日　築地(4)\n');
+});      
+
+
+
+
 //googleカレンダーにゴミ捨ての予定を追加(現在時刻より先の予定)
 controller.hears(['trash (.*) (.*)','ゴミ捨て (.*) (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
     api.trash(bot,message);
