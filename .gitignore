@@ -1,0 +1,15 @@
+node_modules/
+botkit/
+quickstart.js
+client_secret.json
+subid.json
+id.json
+json/
+
+# ホワイトリスト記述
+#*
+#*/
+#!.gitignore
+#!slack_bot.js
+#!README.MD
+#!talk/*
