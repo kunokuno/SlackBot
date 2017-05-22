@@ -7,19 +7,96 @@ module.exports = function (controller,bot) {
     var api = require(__dirname+'/../lib/googleCalender_api.js');
 
 //googleカレンダーから予定を持ってくる(現在時刻より先の予定)
-controller.hears(['list'], 'direct_message,direct_mention,mention', function(bot, message) {
+controller.hears(['calender list'], 'direct_message,direct_mention,mention', function(bot, message) {
     
     //こんな状態とか分割する意味あるのか不明
     api.list(bot,message);
 
 });
 
+//メンバーの名前登録
+// Slackに打ち込まれたメンション付きの名前を
+//      Googleカレンダーに書き込もうとするとSlackが管理してるメンションのIDが書き込まれる。。。
+//　しょうがないのでJSONで管理
+//　入力されたメンションをそのまま名前(文字列)で受け取る方法を探すべき
 
+var nameList_file = __dirname+'/../json/namelist.json';
+
+controller.hears(['member add (.*) <(.*)>'], 'direct_message,direct_mention,mention', function(bot, message) {
+
+    var nameList = JSON.parse(fs.readFileSync( nameList_file , 'utf8')|| "null");
+    
+
+    var matchData = nameList.member.filter(function(item,index){
+                            if(item.slackId == message.match[2]){return true;}
+                        });
+   console.log("****************************\nmatchData\n");
+   console.log(matchData);
+    if(matchData[0]){
+        bot.reply(message,'そのメンバーはすでに登録されていますよ？');
+
+    }else{
+        var addData = { name : message.match[1] , slackId : message.match[2] };
+        console.log("*****addData*****");
+        console.log(addData);
+        nameList.member.push(addData);
+        fs.writeFile(nameList_file, JSON.stringify(nameList, null, '    '));
+        bot.reply(message,'メンバーを登録しました');
+    }
+
+});
+
+controller.hears(['member delete <(.*)>'], 'direct_message,direct_mention,mention', function(bot, message) {
+
+	var nameList = JSON.parse(fs.readFileSync( nameList_file , 'utf8')|| "null");
+
+	var deletedData = nameList.member.filter(function(item,index){
+                            if(item.slackId == message.match[1]){return true;}
+                        });
+	//console.log(deletedData);
+	if(deletedData[0]){
+		nameList.member.pop(deletedData);
+		fs.writeFile(nameList_file, JSON.stringify( nameList, null, '    '));
+       	bot.reply(message,'メンバーを削除しました');
+	}else{
+		bot.reply(message,'そのメンバーは登録されていませんよ？');	
+	}
+
+
+});
+
+//memberのリストを表示
+controller.hears(['member list'], 'direct_message,direct_mention,mention', function(bot, message) {
+
+    var nameList = JSON.parse(fs.readFileSync( nameList_file , 'utf8')|| "null");
+    var member_list = "";
+
+    nameList.member.forEach(function(item){
+        member_list += item.name + " : " + item.slackId + "\n";
+    });
+
+    var aa = "========";
+    bot.reply(message,'メンバーのリストです' + '\n'+ aa +'\n'+ member_list + '\n' + aa);
+
+});
+
+
+
+//テスト用
+controller.hears(['t (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+    console.log('++++++++++++');
+    console.log(message);
+    console.log('++++++++++++');
+    bot.reply(message,'<!secretary>');
+    bot.reply(message,'メッセージテスト'+message.match[1]+message.match[1].slice(1));
+
+});
 
 //googleカレンダーから予定を持ってきたいけど
 //とりあえず
 controller.hears(['semi','ゼミ'], 'direct_message,direct_mention,mention', function(bot, message) {
-    bot.reply(message,'火曜日 14:30～16:30頃\n'+
+    bot.reply(message,'ゼミの予定は以下のようになっています。'+
+                    '火曜日 14:30～16:30頃\n'+
                     '5月16日　薄井(1)　久野(1)　長岡(1)\n'+
                     '5月30日　中山(1)　山岸(1)　遊佐(1)\n'+
                     '6月13日　薄井(2)　久野(2)　長岡(2)\n'+
@@ -45,7 +122,7 @@ controller.hears(['semi','ゼミ'], 'direct_message,direct_mention,mention', fun
 
 
 //googleカレンダーにゴミ捨ての予定を追加(現在時刻より先の予定)
-controller.hears(['trash (.*) (.*)','ゴミ捨て (.*) (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
+controller.hears(['trash <(.*)> (.*)','ゴミ捨て <(.*)> (.*)','ごみ捨て <(.*)> (.*)'], 'direct_message,direct_mention,mention', function(bot, message) {
     api.trash(bot,message);
 
 });
@@ -72,7 +149,7 @@ controller.hears(['remind'], 'direct_message,direct_mention,mention', function(b
 
 
 //当日のゴミ捨ての予定があればリマインド
-var remindTask_1 = cron.schedule('0 00 8 * * 2,5', () =>  {
+var remindTask_1 = cron.schedule('0 0 8 * * 2,5', () =>  {
     
     bot.say({
             text: '本日の予定をお知らせします.',
